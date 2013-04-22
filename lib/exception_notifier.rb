@@ -24,7 +24,9 @@ class ExceptionNotifier
     end
 
     def notify_exception(exception, options={})
-      return if ignored_exception?(options[:ignore_exceptions], exception)
+      options = options.reverse_merge({ force: false })
+      return if !options[:force] && ignored_exception?(options[:ignore_exceptions], exception)
+
       selected_notifiers = options.delete(:notifiers) || notifiers
       [*selected_notifiers].each do |notifier|
         fire_notification(notifier, exception, options)
@@ -57,7 +59,13 @@ class ExceptionNotifier
 
     private
     def ignored_exception?(ignore_array, exception)
-      (ignored_exceptions + Array.wrap(ignore_array)).map(&:to_s).include?(exception.class.name)
+      ignored_exceptions_classes(ignore_array).each do |klass|
+        return true if exception.kind_of?(klass)
+      end
+    end
+
+    def ignored_exceptions_classes(ignore_array)
+      (ignored_exceptions + Array.wrap(ignore_array)).map(&:constantize)
     end
 
     def fire_notification(notifier_name, exception, options)
