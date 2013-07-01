@@ -62,6 +62,8 @@ class ExceptionNotifier
       ignored_exceptions_classes(ignore_array).each do |klass|
         return true if exception.kind_of?(klass)
       end
+
+      false
     end
 
     def ignored_exceptions_classes(ignore_array)
