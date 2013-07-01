@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-  s.name = 'exception_notification'
-  s.version = '3.0.1'
+  s.name = 'siliconsalad-exception_notification'
+  s.version = '4.0.1'
   s.authors = ["Jamis Buck", "Josh Peek"]
   s.date = %q{2013-02-02}
   s.summary = "Exception notification for Rails apps"
